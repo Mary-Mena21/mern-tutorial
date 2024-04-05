@@ -3,7 +3,7 @@ import { UseSelector, useDispatch } from "react-redux";
 import { useNigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaUser } from "react-icons/fa";
-import { register, res } from "../features/aauthSlice";
+import { register, reset } from "../features/auth/authSlice";
 
 function Register() {
     const [formData, setFormData] = useState({
