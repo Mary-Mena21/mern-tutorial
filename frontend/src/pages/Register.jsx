@@ -1,5 +1,10 @@
 import { useState, useEffect, React } from "react";
+import { UseSelector, useDispatch } from "react-redux";
+import { useNigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { FaUser } from "react-icons/fa";
+import { register, res } from "../features/aauthSlice";
+
 function Register() {
     const [formData, setFormData] = useState({
         name: "",
@@ -13,6 +18,12 @@ function Register() {
             ...prevState,
             [e.target.name]: e.target.value,
         }));
+    // const onSubmit = (e) => {
+    //     e.preventDefault();
+    //     if (password !== password2) {
+    //         console.log("Passwords do not match");
+    //     }
+    // }
     return (
         <>
             <section className="heading">
@@ -29,6 +40,7 @@ function Register() {
                             name="name"
                             value={name}
                             placeholder="Enter your name"
+                            onChange={onChange}
                         />
                     </div>
                     <div className="form-group">
@@ -39,12 +51,13 @@ function Register() {
                             email="email"
                             value={email}
                             placeholder="Enter your email"
-                            onChange={(e) =>
+                            /*                             onChange={(e) =>
                                 setFormData({
                                     ...formData,
                                     email: e.target.value,
                                 })
-                            }
+                            } */
+                            onChange={onChange}
                         />
                     </div>
                     <div className="form-group">
@@ -55,12 +68,13 @@ function Register() {
                             password="password"
                             value={password}
                             placeholder="Enter your password"
-                            onChange={(e) =>
+                            /*                             onChange={(e) =>
                                 setFormData({
                                     ...formData,
                                     password: e.target.value,
                                 })
-                            }
+                            } */
+                            onChange={onChange}
                         />
                     </div>
                     <div className="form-group">
@@ -70,12 +84,13 @@ function Register() {
                             id="password2"
                             placeholder="confirm your password"
                             value={password2}
-                            onChange={(e) =>
+                            /*                             onChange={(e) =>
                                 setFormData({
                                     ...formData,
                                     password2: e.target.value,
                                 })
-                            }
+                            } */
+                            onChange={onChange}
                         />
                     </div>
                     <div className="form-group">
