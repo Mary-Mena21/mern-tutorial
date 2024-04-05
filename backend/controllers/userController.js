@@ -1,23 +1,52 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
-const  jwt  = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
 //@desc   get me
-//@route  GET /api/users
+//@route  GET /api/users/me
 //@access private
 const getMe = asyncHandler(async (req, res) => {
-    //const users = await User.find();
+    const { _id, email, password, name } = await User.findById(req.user.id);
+    res.status(200).json({
+        id: _id,
+        email,
+        password,
+        name,
+    });
+});
 
+// const getMe2 = asyncHandler(async (req, res) => {
+//     const user = await User.findById(req.user.id).select("-password"); // Exclude password from the response
+
+//     if (!user) {
+//         res.status(404);
+//         throw new Error("User not found");
+//     }
+
+//     res.status(200).json({
+//         id: user._id,
+//         email: user.email,
+//     });
+// });
+
+//----------------------------------------------------------------
+//@desc   get all users
+//@route  GET /api/users/all
+//@access private
+const getAllUsers = asyncHandler(async (req, res) => {
+    const users = await User.find();
+    res.status(200).json(users);
     res.json({ message: "success" });
 });
 
-// //Generate JWT token
-// const generateToken = (id) => {
-//     return jwt.sign({ id }, process.env.JWT_SECRET, {
-//         expiresIn: "30d",
-//     });
-// };
+//-----------------------------JWT--------------------------------
+//Generate JWT token
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: "30d",
+    });
+};
 
 //-----------------------------register----------------------------------
 //@desc   registerUser new user
@@ -125,17 +154,6 @@ const deleteUser = asyncHandler(async (req, res) => {
     res.status(200).json({ message: `Delete user!${req.params.id}` });
 });
 
-//-----------------------------JWT--------------------------------
-//Generate JWT token
-let x=5
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: "30d",
-    });
-    //  return 4
-};
-
-console.log(process.env.JWT_SECRET)
 //-----------------------------JWT-2-------------------------------
 /**
  * Generates a JSON Web Token (JWT) with the provided user ID and expiration time.
@@ -145,7 +163,7 @@ console.log(process.env.JWT_SECRET)
 const generateToken_2 = (id) => {
     // The payload of the JWT, which includes the user's ID.
     const payload = {
-        id
+        id,
     };
 
     // The secret key used to sign the JWT.
@@ -157,11 +175,16 @@ const generateToken_2 = (id) => {
     };
 
     // Generate and return the JWT.
-    return  jwt.sign(payload, secret, options);
+    return jwt.sign(payload, secret, options);
 };
 
-
-
-module.exports = { loginUser, getMe, updateUser, deleteUser, registerUser };
+module.exports = {
+    loginUser,
+    getMe,
+    getAllUsers,
+    updateUser,
+    deleteUser,
+    registerUser,
+};
 
 ////mongodb+srv://mariana1mena1:RMFJZHhLJ3KiVWkP@mern-app-cluster.ciufomr.mongodb.net/
